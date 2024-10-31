@@ -1,4 +1,4 @@
-const signUpTemplate = (firstName, otp) => {
+export const signUpTemplate = ( email,otp) => {
   return `
       <!DOCTYPE html>
       <html lang="en">
@@ -68,10 +68,10 @@ const signUpTemplate = (firstName, otp) => {
             </p>
 
             <p>If you did not create an account, please ignore this email.</p>
-            <p>Best regards,<br>NECTAR-BUZZ Team</p>
+          
           </div>
           <div class="footer">
-            <p>&copy; ${new Date().getFullYear()} NECTAR-BUZZ Corp. All rights reserved.</p>
+            <p>&copy; ${new Date().getFullYear()} All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -79,6 +79,4 @@ const signUpTemplate = (firstName, otp) => {
     `;
 };
 
-module.exports = {
-  signUpTemplate,
-};
+

@@ -11,14 +11,13 @@ const userSchema = new mongoose.Schema(
     },
     otp: {
       type: String,
-      require: true,
     },
     otpExpiry: {
       type: String,
     },
-    token: {
-      type: Number,
-      unique: true,
+    isVerified: {
+      type: Boolean,
+      default: false,
     },
     collections: {
       type: mongoose.Schema.Types.ObjectId,

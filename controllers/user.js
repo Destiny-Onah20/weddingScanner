@@ -3,53 +3,61 @@ import jsonwebtokenwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { generateUserToken } from "../utils/jwt.js";
 import { sendMail } from "../helper/mail.js";
+import { signUpTemplate } from "../helper/template.js";
 
 export const signUp = async (req, res) => {
+  const generateOTP = () => {
+    return Math.floor(100000 + Math.random() * 900000).toString();
+  };
   try {
-    const generateOTP = () => {
-      return Math.floor(100000 + Math.random() * 900000).toString();
-    };
+   
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({
         message: `please enter email and password`,
       });
     }
-    const checkEmail = await User.findOne({ email: email.toLowerCase() });
-    if (!checkEmail) {
-      return res.status(400).json({
-        message: `email already exist`,
+    // const checkEmail = await User.findOne({ email: email.toLowerCase() });
+    
+      const saltPassword = await bcrypt.genSalt(12);
+      const hashPassword = await bcrypt.hash(password, saltPassword);
+      // Generate and Hash OTP
+      const otp = generateOTP();
+      const otpExpiry = Date.now() + 10 * 60 * 1000;
+  
+      const user = new User({
+        email: email.toLowerCase(),
+        password: hashPassword,
+        otp:otp,
+        otpExpiry:otpExpiry,
+      });
+      await user.save();
+  
+      await sendMail({
+        subject: "Kindly Verify Your Email",
+        email: user.email,
+        html: signUpTemplate(user.email, otp),
+      });
+  
+      res.status(201).json({
+        message: `Welcome ${user.email}. Kindly check your email for the verification link and OTP.`,
+        data: user,
+      });
+
+    
+  
+  } catch (error) {
+    if (error.code === 11000) {
+      const whatWentWrong = Object.keys(error.keyValue)[0];
+      return res.status(500).json({
+        message: `A user with this ${whatWentWrong} exists.`,
+      });
+    } else {
+      res.status(500).json({
+        message: "An error occurred while processing your request.",
+        errorMessage: error.message,
       });
     }
-    const saltPassword = await bcrypt.genSalt(12);
-    const hashPassword = await bcrypt.hash(password, saltPassword);
-    // Generate and Hash OTP
-    const otp = generateOTP();
-    const otpExpiry = Date.now() + 10 * 60 * 1000;
-
-    const user = new User({
-      email: email.toLowerCase(),
-      password: hashPassword,
-      otp,
-      otpExpiry,
-    });
-    await user.save();
-
-    await sendMail({
-      subject: "Kindly Verify Your Email",
-      email: user.email,
-      text: `Your OTP code is: ${otp}`,
-      html: signUpTemplate(user.email, otp),
-    });
-
-    res.status(201).json({
-      message: `Welcome ${user.email}. Kindly check your email for the verification link and OTP.`,
-      data: user,
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: `error trying to process your request`,
-    });
   }
 };
 export const verifyEmail = async (req, res) => {
