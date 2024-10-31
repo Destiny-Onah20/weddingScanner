@@ -140,3 +140,35 @@ export const login = async (req,res) => {
        });
   }
 };
+
+
+export const createAnEvent = async (req, res) => {
+  try {
+    const { name, type } = req.body;
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    const eventData = {
+      eventName: name,
+      eventType: type,
+      user_id: req.user._id,
+    };
+    const event = await Event.create(eventData);
+    return {
+      message: "success",
+      data: event
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: error.message ,
+      error:error.message
+     });
+  }
+};
+
+export const shareEventLink = async (req, res) => {
+
+};
