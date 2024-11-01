@@ -11,8 +11,8 @@ const transporter = await nodeMailer.createTransport(
       service :  process.env.SERVICE,
      
  auth: {
-         user:process.env.mail_id,
-          pass:process.env.mail_password  ,
+         user:process.env.MAIL_ID,
+          pass:process.env.MAIL_PASSWORD  ,
         },
       }
     

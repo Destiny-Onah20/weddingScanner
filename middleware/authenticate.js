@@ -3,7 +3,6 @@ import User from "../models/userModel.js";
 
 
 
-
 export const authenticate = async (req, res, next) => {
     try {
         const hasAuthorization = req.headers["authorization"]

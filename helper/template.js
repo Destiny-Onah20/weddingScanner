@@ -1,4 +1,6 @@
 export const signUpTemplate = ( email,otp) => {
+  console.log("knjb3r");
+  
   return `
       <!DOCTYPE html>
       <html lang="en">
