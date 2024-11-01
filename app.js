@@ -3,6 +3,7 @@ import swaggerUi from "swagger-ui-express"
 import cors from "cors";
 import fileUpload from "express-fileupload";
 import swaggerSpec from "./utils/docs.setup.js";
+import router from "./routers/userRoute.js";
 
 const app = express();
 
@@ -19,6 +20,8 @@ app.get("/", (req, res)=>{
         message: "Welcome to Wedding planner"
     })
 });
+
+app.use("/api/v1", router);
 
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 

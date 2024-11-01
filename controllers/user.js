@@ -65,7 +65,7 @@ export const verifyEmail = async (req, res) => {
     const { otp } = req.body;
 
     if (!otp) {
-      return res.status(400).json({ message: "Missing OTP in request body." });
+      return res.status(400).json({ message: "please input otp." });
     }
 
     const user = await User.findOne({ otp: otp.toString() }); // Assuming you compare hashed OTPs
@@ -148,7 +148,16 @@ export const login = async (req,res) => {
        });
   }
 };
-
+export const oneUser=async(req,res)=>{
+  try {
+    const {userId}=req.user
+  } catch (error) {
+    res.status(500).json({
+      message:`error trying to get this user`,
+      errorMessage:error.message
+    })
+  }
+}
 
 export const createAnEvent = async (req, res) => {
   try {
@@ -180,3 +189,20 @@ export const createAnEvent = async (req, res) => {
 export const shareEventLink = async (req, res) => {
 
 };
+export const oneEvent=async(req,res)=>{
+  try {
+    const {eventId}=req.params
+    const findEvent=await Event.findById(eventId);
+    if(!findEvent){
+    return res.status(404).json({
+      message:`event does not exist`
+    })
+    }
+    
+  } catch (error) {
+    res.status(500).json({
+      message: error.message ,
+      error:error.message
+     })
+  }
+}
