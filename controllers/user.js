@@ -326,16 +326,16 @@ export const getOneEvent = async (req, res) => {
 export const allEvent = async (req, res) => {
   try {
     const { userId } = req.user;
-    console.log(userId)
+    console.log(userId);
 
     if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: 'Invalid user ID.' });
+      return res.status(400).json({ message: "Invalid user ID." });
     }
-
+    
     const allEvents = await Event.find({ user: userId });
     if (allEvents.length === 0) {
       return res.status(400).json({
-        message: 'No events found.',
+        message: "No events found.",
       });
     }
 
@@ -345,7 +345,7 @@ export const allEvent = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: 'An error occurred while retrieving events.',
+      message: "An error occurred while retrieving events.",
       error: error.message,
     });
   }
