@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
-import RevokedToken from "../models/revoke-token-model.js";
 
 
 

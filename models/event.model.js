@@ -12,9 +12,15 @@ const eventSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "users"
     },
-    collection: {
+    collections: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "collections"
+    },
+    link:{
+      type: String
+    },
+    qrcode:{
+      type: String
     }
   },
   { timestamps: true,
