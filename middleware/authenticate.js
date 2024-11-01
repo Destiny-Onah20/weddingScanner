@@ -33,7 +33,8 @@ export const authenticate = async (req, res, next) => {
             });
         }
 
-        req.user = user;
+        req.user = decodedToken;
+        console.log(decodedToken)
 
         next();
 
