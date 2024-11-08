@@ -13,12 +13,12 @@ export const signupValidation = async (req, res, next) => {
                 'string.email': 'Please provide a valid email address.'
             }),
         password: joi.string()
-            .min(8)
+           
             .required()
             .messages({
                 'string.base': 'Password must be a string.',
                 'string.empty': 'Password is required.',
-                'string.min': 'Password must be at least 8 characters long.'
+               
             })
     });
 

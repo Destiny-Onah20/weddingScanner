@@ -173,7 +173,7 @@ export const createAnEvent = async (req, res) => {
     const eventData = {
       name: name,
       event_type: type,
-      user_id: req.user._id,
+      user: req.user._id,
     };
     const event = await Event.create(eventData);
     console.log(event);
@@ -299,54 +299,44 @@ export const getOneEvent = async (req, res) => {
     });
   }
 };
-// export const allEvent = async (req, res) => {
-//   try {
-//     const {userId} = req.user;
-//     console.log(userId)
-//     const AllEvent = await Event.find({ user: userId });
-//     if (AllEvent.length === 0) {
-//       return res.status(400).json({
-//         message: `no event found`,
-//       });
-//     }
-//     res.status(200).json({
-//       message:`here are all ${AllEvent.length} events `,
-//       data:AllEvent
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: error.message,
-//       error: error.message,
-//     });
-//   }
-// };
-
-
-
 export const allEvent = async (req, res) => {
   try {
-    const { userId } = req.user;
-    console.log(userId);
-
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ message: "Invalid user ID." });
-    }
-    
-    const allEvents = await Event.find({ user: userId });
-    if (allEvents.length === 0) {
+    const {userId} = req.user._id;
+    const AllEvent = await Event.find({user:userId});
+    if (AllEvent.length === 0) {
       return res.status(400).json({
-        message: "No events found.",
+        message: `no event found`,
       });
     }
-
     res.status(200).json({
-      message: `Here are all ${allEvents.length} events.`,
-      data: allEvents,
+      message:`here are all ${AllEvent.length} events `,
+      data:AllEvent
     });
   } catch (error) {
     res.status(500).json({
-      message: "An error occurred while retrieving events.",
+      message: error.message,
       error: error.message,
     });
   }
 };
+
+export const AllUser=async(req,res)=>{
+  try {
+    const users=await User.find();
+    if(users.length ===0){
+      return res.status(400).json({
+        message:`no user found`
+      })
+    }
+    res.status(200).json({
+      message:`get all the ${all.length}`,
+      data:users
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while retrieving events.",
+      error: error.message,
+    })
+  }
+}
