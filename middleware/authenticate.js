@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 
 export const authenticate = async (req, res, next) => {
     try {
-        const hasAuthorization = req.headers["authorization"]
+        const hasAuthorization = req.headers.authorization
         if (!hasAuthorization) {
             return res.status(401).json({
                 message: 'Action requires sign-in. Please log in to continue.'
@@ -33,7 +33,8 @@ export const authenticate = async (req, res, next) => {
             });
         }
 
-        req.user = user;
+        req.user = decodedToken;
+        console.log(decodedToken)
 
         next();
 
