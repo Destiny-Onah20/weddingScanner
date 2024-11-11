@@ -152,7 +152,17 @@ export const login = async (req, res) => {
 };
 export const oneUser = async (req, res) => {
   try {
-    const { userId } = req.user;
+    const userId = req.params.id;
+    const checkUser = await User.findById(userId);
+    if (!checkUser) {
+      return res.status(404).json({
+        message: `user not found`,
+      });
+    }
+    res.status(200).json({
+      message: `get me this user`,
+      data: checkUser,
+    });
   } catch (error) {
     res.status(500).json({
       message: `error trying to get this user`,
@@ -176,7 +186,6 @@ export const createAnEvent = async (req, res) => {
       user: req.user._id,
     };
     const event = await Event.create(eventData);
-    console.log(event);
 
     return res.status(200).json({
       message: "success",
@@ -299,18 +308,20 @@ export const getOneEvent = async (req, res) => {
     });
   }
 };
-export const allEvent = async (req, res) => {
+export const getAllEvent = async (req, res) => {
   try {
-    const {userId} = req.user._id;
-    const AllEvent = await Event.find({user:userId});
-    if (AllEvent.length === 0) {
-      return res.status(400).json({
+    const userId = req.params.user;
+    const allEvent = await Event.find({ user: userId });
+    console.log(allEvent, "USERID");
+
+    if (allEvent.length === 0) {
+      return res.status(404).json({
         message: `no event found`,
       });
     }
     res.status(200).json({
-      message:`here are all ${AllEvent.length} events `,
-      data:AllEvent
+      message: `here are all ${allEvent.length} events `,
+      data: allEvent,
     });
   } catch (error) {
     res.status(500).json({
@@ -320,23 +331,22 @@ export const allEvent = async (req, res) => {
   }
 };
 
-export const AllUser=async(req,res)=>{
+export const AllUser = async (req, res) => {
   try {
-    const users=await User.find();
-    if(users.length ===0){
+    const users = await User.find();
+    if (users.length === 0) {
       return res.status(400).json({
-        message:`no user found`
-      })
+        message: `no user found`,
+      });
     }
     res.status(200).json({
-      message:`get all the ${all.length}`,
-      data:users
-    })
-    
+      message: `get all the ${users.length}`,
+      data: users,
+    });
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while retrieving events.",
       error: error.message,
-    })
+    });
   }
-}
+};

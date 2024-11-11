@@ -11,8 +11,10 @@ export const authenticate = async (req, res, next) => {
                 message: 'Action requires sign-in. Please log in to continue.'
             });
         }
+      
 
         const token = hasAuthorization.split(' ')[1];
+        
 
         if (!token) {
             return res.status(401).json({
@@ -34,8 +36,6 @@ export const authenticate = async (req, res, next) => {
         }
 
         req.user = decodedToken;
-        console.log(decodedToken)
-
         next();
 
     } catch (error) {
@@ -44,6 +44,7 @@ export const authenticate = async (req, res, next) => {
                 message: "Oops! Access denied. Your session has expired. Please sign in again."
             });
         }
+        console.log(error),
         res.status(500).json({
             Error: error.message
         });
