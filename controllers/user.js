@@ -152,7 +152,7 @@ export const login = async (req, res) => {
 };
 export const oneUser = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = req.user._id;
     const checkUser = await User.findById(userId);
     if (!checkUser) {
       return res.status(404).json({
