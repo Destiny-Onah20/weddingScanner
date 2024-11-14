@@ -15,6 +15,6 @@ router.get("/events/:id", getOneEvent);
 router.post("/events/:id/uploads", uploadFile);
 router.get("/events/users/:user", authenticate, getAllEvent);
 router.get("/users",AllUser);
-router.get("/user/:id",authenticate,oneUser);
+router.get("/user",authenticate,oneUser);
 
 export default router
